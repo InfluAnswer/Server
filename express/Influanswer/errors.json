@@ -1,0 +1,40 @@
+{
+    "400": {
+        "status": 200,
+        "description": "값이 비어있습니다.",
+        "message": "Null Value"
+    },
+    "1400" : {
+        "status": 200,
+        "description": "잘못된 트랜잭션 입니다.",
+        "message": "Invalid Transaction"
+    },
+    "1401" : {
+        "status": 200,
+        "description": "배포 실패",
+        "message": "Fail to Migrate"
+    },
+    "1402": {
+        "status": 200,
+        "description": "잘못된 컨트랙트 입니다.",
+        "message": "Invalid Contract"
+    },
+    "500": {
+        "status": 500,
+        "description": "서버 오류",
+        "message": "Internal Server Error"
+    },
+    "9401": {
+        "status": 200,
+        "description": "파라미터가 잘못되었습니다.",
+        "message": "Invalid Parameter"
+    },
+    "8400": {
+        "status": false,
+        "message": "400 Error"
+    },
+    "9500": {
+        "status": false,
+        "message": "500 error"
+    }
+}
