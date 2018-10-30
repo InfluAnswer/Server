@@ -3,18 +3,18 @@ const router = express.Router()
 const transactionModule = require('../../module/transaction.js')
 
 router.post('/', async(req, res, next) => {
-  let idx = req.body.idx
-  let contractTransaction
+  let contractTransaction = req.body.contractTransaction
+  let contractAddress
   try {
 
-  	if(!idx){
+  	if(!contractTransaction){
   		next("400")
   		return
   	}
 
-	contractTransaction = await transactionModule.migrate(idx)
+	contractAddress = await transactionModule.migrate_queue(contractTransaction)
 
-	if(!contractTransaction){
+	if(!contractAddress){
 		next("1401")
 		return
 	}
@@ -24,13 +24,12 @@ router.post('/', async(req, res, next) => {
 	*/
 
   } catch(err) {
-  	console.log("???",err)
   	next(err)
   	return
   }
 
   res.r({
-  	contractTransaction : contractTransaction
+  	contractAddress : contractAddress
   })
 })
 

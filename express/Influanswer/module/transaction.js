@@ -6,8 +6,35 @@ const db = require('./db')
 
 const contractJson = require('../../../build/contracts/conversionAction.json')
 
-let web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 module.exports = {
+    migrate_queue : async(contractTransaction) => {
+      let transactionReceipt = web3.eth.getTransactionReceipt(contractTransaction)
+      let contractAddress
+
+      if(transactionReceipt == null){
+        return "wait"
+      } 
+
+      contractAddress = transactionReceipt.contractAddress
+
+      let insertAddressQuery = 
+      `
+      INSERT INTO smartContract(contractAddress)
+      VALUES (?)
+      `
+      let insertResult = await db.queryParamArr(insertAddressQuery, contractAddress)
+     
+      let updateAddressQuery =
+      `
+      UPDATE contractTransaction
+      SET contractAddress = ?
+      WHERE contractTransaction = ?
+      `
+      let updateResult = await db.queryParamArr(updateAddressQuery,[contractAddress, contractTransaction])
+
+      return contractAddress
+    },
     migrate : async (idx) => {
 /*
 나중에 writing_idx 받아와서 거기에 insert하는것 까지 하기
@@ -18,18 +45,17 @@ module.exports = {
       let abiDefinition = JSON.parse(compiledCode.contracts[':conversionAction'].interface)
       let StorageContract = web3.eth.contract(abiDefinition)
       let byteCode = compiledCode.contracts[':conversionAction'].bytecode
-      let deployedContract = StorageContract.new(idx,{data: "0x" + byteCode, from: web3.eth.accounts[2], gas: 4700000})
-      let contractAddress = web3.eth.getTransactionReceipt(deployedContract.transactionHash).contractAddress   
+      let deployedContract = StorageContract.new(idx,{data: "0x" + byteCode, from: web3.eth.accounts[0], gas: 4700000})
 
       let insertAddressQuery = 
       `
-      INSERT INTO smartContract(contractAddress)
+      INSERT INTO contractTransaction(contractTransaction)
       VALUES (?)
       `
-      let addressResult = await db.queryParamArr(insertAddressQuery, contractAddress)
+      let addressResult = await db.queryParamArr(insertAddressQuery, deployedContract.transactionHash)
      
-      console.log(contractAddress)
-      return contractAddress
+      console.log(deployedContract.transactionHash)
+      return deployedContract.transactionHash
     },
 
     search : async(contractAddress) => {

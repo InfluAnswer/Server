@@ -5,11 +5,13 @@ const transactionMigrateRouter = require('./migrate')
 const transactionHistoryRouter = require('./history')
 const transactionSearchRouter = require('./search')
 const transactionWriteRouter = require('./write')
+const transactionMigrateQueueRouter = require('./migrate_queue')
 
 router.use('/migrate', transactionMigrateRouter)
 router.use('/history', transactionHistoryRouter)
 router.use('/search', transactionSearchRouter)
 router.use('/write', transactionWriteRouter)
+router.use('/migrate_queue', transactionMigrateQueueRouter)
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
