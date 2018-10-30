@@ -64,7 +64,7 @@ module.exports = {
       let contractResult = contract.getAction()
       let conversionAction = {
         download : contractResult[0].c[0],
-        singUp : contractResult[1].c[0],
+        signUp : contractResult[1].c[0],
         hits : contractResult[2].c[0],
         buy : contractResult[3].c[0]
       }
@@ -118,5 +118,17 @@ module.exports = {
 
       console.log(conversionAction)
       return conversionAction
+    },
+    get_contract : async(contractTransaction) => {
+      let transactionReceipt = web3.eth.getTransactionReceipt(contractTransaction)
+     
+      console.log(transactionReceipt)
+      let contractAddress
+      if(transactionReceipt == null){
+        return "wait"
+      }
+
+      contractAddress = transactionReceipt.contractAddress
+      return contractAddress
     }
 }

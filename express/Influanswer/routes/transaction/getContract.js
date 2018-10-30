@@ -2,31 +2,18 @@ const express = require('express')
 const router = express.Router()
 const transactionModule = require('../../module/transaction.js')
 
-router.post('/', async(req, res, next) => {
-  let contractTransaction = req.body.contractTransaction
+router.get('/', async(req, res, next) => {
+  let contractTransaction = req.query.contractTransaction
   let contractAddress
-  try {
+  console.log(contractTransaction)
 
+  try {
   	if(!contractTransaction){
   		next("400")
   		return
   	}
 
-	contractAddress = await transactionModule.migrate_queue(contractTransaction)
-
-	if(!contractAddress){
-		next("1401")
-		return
-	}
-
-  if(contractAddress == "wait"){
-    next
-  }
-
-	/*
-	여기에 rds에 contractAddress 넣기
-	*/
-
+	contractAddress = await transactionModule.get_contract(contractTransaction)
   } catch(err) {
   	next(err)
   	return

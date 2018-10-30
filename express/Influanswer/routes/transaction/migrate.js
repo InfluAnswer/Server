@@ -6,12 +6,10 @@ router.post('/', async(req, res, next) => {
   let idx = req.body.idx
   let contractTransaction
   try {
-
   	if(!idx){
   		next("400")
   		return
   	}
-
 	contractTransaction = await transactionModule.migrate(idx)
 
 	if(!contractTransaction){
@@ -24,7 +22,6 @@ router.post('/', async(req, res, next) => {
 	*/
 
   } catch(err) {
-  	console.log("???",err)
   	next(err)
   	return
   }
