@@ -14,17 +14,17 @@ module.exports = {
 
       if(transactionReceipt == null){
         return "wait"
-      } 
+      }
 
       contractAddress = transactionReceipt.contractAddress
 
-      let insertAddressQuery = 
-      `
-      INSERT INTO smartContract(contractAddress)
-      VALUES (?)
-      `
-      let insertResult = await db.queryParamArr(insertAddressQuery, contractAddress)
-     
+      // let insertAddressQuery =
+      // `
+      // INSERT INTO smartContract(contractAddress)
+      // VALUES (?)
+      // `
+      // let insertResult = await db.queryParamArr(insertAddressQuery, contractAddress)
+
       let updateAddressQuery =
       `
       UPDATE contractTransaction
@@ -35,7 +35,7 @@ module.exports = {
 
       return contractAddress
     },
-    migrate : async (idx) => {
+    migrate : async (contract_id) => {
 /*
 나중에 writing_idx 받아와서 거기에 insert하는것 까지 하기
 */
@@ -45,15 +45,15 @@ module.exports = {
       let abiDefinition = JSON.parse(compiledCode.contracts[':conversionAction'].interface)
       let StorageContract = web3.eth.contract(abiDefinition)
       let byteCode = compiledCode.contracts[':conversionAction'].bytecode
-      let deployedContract = StorageContract.new(idx,{data: "0x" + byteCode, from: web3.eth.accounts[0], gas: 4700000})
+      let deployedContract = StorageContract.new(contract_id ,{data: "0x" + byteCode, from: web3.eth.accounts[0], gas: 4700000})
 
-      let insertAddressQuery = 
+      let insertAddressQuery =
       `
-      INSERT INTO contractTransaction(contractTransaction)
-      VALUES (?)
+      INSERT INTO contractTransaction(contractTransaction, contract_id)
+      VALUES (?, ?)
       `
-      let addressResult = await db.queryParamArr(insertAddressQuery, deployedContract.transactionHash)
-     
+      let addressResult = await db.queryParamArr(insertAddressQuery, [deployedContract.transactionHash, contract_id])
+
       console.log(deployedContract.transactionHash)
       return deployedContract.transactionHash
     },
@@ -63,39 +63,53 @@ module.exports = {
 
       let contractResult = contract.getAction()
       let conversionAction = {
-        download : contractResult[0].c[0],
-        signUp : contractResult[1].c[0],
-        hits : contractResult[2].c[0],
-        buy : contractResult[3].c[0]
+        action : contractResult[0].c[0],
+        hits : contractResult[1].c[0],
       }
 
       console.log(conversionAction)
       return conversionAction
     },
 
-    write : async(gas, contractAddress, download, signUp, hits, buy) => {
+    write : async(gas, contractAddress, action, hits) => {
       let contract = web3.eth.contract(contractJson['abi']).at(contractAddress)
-      let transactionHash = contract.setAction(download, signUp, hits, buy, {from : web3.eth.accounts[0], gas : gas})
-      
+      let transactionHash = contract.setAction(action, hits,{from : web3.eth.accounts[0], gas : gas})
+
       console.log(transactionHash)
-      let writeCAQuery = 
+      let writeCAQuery =
       `
-      UPDATE smartContract 
-      SET download = ?, signUp = ?, hits = ?, buy = ? 
+      UPDATE smartContract
+      SET conversionAction = ?, hits = ?
+      WHERE contract_id = (
+      SELECT contract_id
+      FROM contractTransaction
+      WHERE contractAddress = ?
+      )
+      `
+
+      let writeResult = await db.queryParamArr(writeCAQuery, [action, hits, contractAddress])
+      if(!writeResult){
+        return undefined
+      }
+
+      let contractTransactionQuery =
+      `
+      SELECT contractTransaction
+      FROM contractTransaction
       WHERE contractAddress = ?
       `
 
-      let writeResult = await db.queryParamArr(writeCAQuery, [download, signUp, hits, buy, contractAddress])
-      if(!writeResult){
+      let contractTransactionResult = await db.queryParamArr(contractTransactionQuery, contractAddress)
+      if(!contractTransactionResult){
         return undefined
       }
 
       let writeTransactionQuery =
       `
-      INSERT INTO transaction(contractAddress, transaction)
+      INSERT INTO transaction(contractTransaction, transaction)
       VALUES (?, ?)
       `
-      let writeTransactionResult = await db.queryParamArr(writeTransactionQuery, [contractAddress, transactionHash])
+      let writeTransactionResult = await db.queryParamArr(writeTransactionQuery, [contractTransactionResult[0].contractTransaction, transactionHash])
       if(!writeTransactionResult){
         return undefined
       }
@@ -105,15 +119,11 @@ module.exports = {
 
     history : async(page, transactionHash) => {
       let input = web3.eth.getTransaction(transactionHash).input
-      let download = "0x" + input.substr(10, 64)
-      let signUp = input.substr(74, 64)
-      let hits = input.substr(138, 64)
-      let buy = input.substr(202, 64)
+      let action = input.substr(10, 64)
+      let hits = input.substr(74, 64)
       let conversionAction = {
-        download : hexToDec(download),
-        signUp : hexToDec(signUp),
-        hits : hexToDec(hits),
-        buy : hexToDec(buy)
+        conversionAction : hexToDec(action),
+        hits : hexToDec(hits)
       }
 
       console.log(conversionAction)
@@ -121,7 +131,7 @@ module.exports = {
     },
     get_contract : async(contractTransaction) => {
       let transactionReceipt = web3.eth.getTransactionReceipt(contractTransaction)
-     
+
       console.log(transactionReceipt)
       let contractAddress
       if(transactionReceipt == null){

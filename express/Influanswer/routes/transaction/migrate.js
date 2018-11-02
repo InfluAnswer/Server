@@ -3,14 +3,14 @@ const router = express.Router()
 const transactionModule = require('../../module/transaction.js')
 
 router.post('/', async(req, res, next) => {
-  let idx = req.body.idx
+  let contract_id = req.body.contract_id
   let contractTransaction
   try {
-  	if(!idx){
+  	if(!contract_id){
   		next("400")
   		return
   	}
-	contractTransaction = await transactionModule.migrate(idx)
+	contractTransaction = await transactionModule.migrate(contract_id)
 
 	if(!contractTransaction){
 		next("1401")

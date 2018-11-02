@@ -2,35 +2,28 @@ pragma solidity ^0.4.18;
 
 contract conversionAction{
 
-    event settingAction(int download, int signUp, int hits, int buy);
+    event settingAction(int action, int hits);
 
-    int private contract_idx; // interact with RDB's contract indendifier
+    int private contract_id; // interact with RDB's contract indendifier
+    int public action;
+    int public hits;
 
-    struct Action {
-      int download;
-      int signUp;
-      int hits;
-      int buy;
+    constructor(int contract_id) public{
+        contract_id = contract_id;
     }
 
-    Action action;
-
-    constructor(int idx) public{
-        contract_idx = idx;
+    function setAction(int action, int hits) public{
+        emit settingAction(action, hits);
+        action = action;
+        hits = hits;
     }
 
-    function setAction(int download, int signUp, int hits, int buy) public{
-        emit settingAction(download, signUp, hits, buy);
-        action = Action({
-          download : download,
-          signUp : signUp,
-          hits : hits,
-          buy : buy
-        });
+    function getAction() public view returns (int action, int hits) {
+        return (action, hits);
     }
 
-    function getAction() public view returns (int download, int signUp, int hits, int buy) {
-        return (action.download, action.signUp, action.hits, action.buy);
+    function getId() public view returns (int contract_id) {
+      return (contract_id);
     }
 
 }
