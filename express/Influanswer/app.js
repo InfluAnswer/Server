@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
+var user = require('./module/user');
 
 var indexRouter = require('./routes/index');
 
@@ -44,6 +45,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// app.use(async (req, res, next) => {
+//   let result = await user.verify(req.headers.token)
+
+//   if(!result){
+//     next("10401")
+//   }
+// });
 
 app.use('/', indexRouter);
 // error handler

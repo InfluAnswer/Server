@@ -8,6 +8,7 @@
   "dependencies": {
     "child_process": "^1.0.2",
     "cookie-parser": "~1.4.3",
+    "crypto-promise": "^2.1.0",
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "express-validation": "^1.0.2",
@@ -15,6 +16,7 @@
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
     "joi": "^14.0.1",
+    "jsonwebtoken": "^8.3.0",
     "mariadb": "^2.0.0-alpha",
     "morgan": "~1.9.0",
     "mysql": "^2.16.0",
