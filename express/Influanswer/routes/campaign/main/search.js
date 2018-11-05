@@ -1,19 +1,26 @@
 const express = require('express')
 const router = express.Router()
-//const campaign = require('../../module/campaign')
+const campaign = require('../../../module/campaign')
 
 router.post('/', async (req, res, next) => {
+  let types = req.body.types
+  let keyword = req.body.keyword
+  let data
 
+	try {
+    if(!types){
+      next("400")
+      return
+    }
 
-	// try {
-	//
-	//
-	// } catch(err) {
-	// 	next(err)
-	// 	return
-	// }
-	//
-	// res.r()
+    data = await campaign.search(types, keyword)
+
+	} catch(err) {
+		next(err)
+		return
+	}
+
+	res.r(data)
 })
 
 module.exports = router

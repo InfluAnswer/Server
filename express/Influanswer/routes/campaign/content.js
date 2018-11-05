@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const campaign = require('../../module/campaign')
+//const campaign = require('../../module/campaign')
 
 router.post('/', async (req, res, next) => {
 
