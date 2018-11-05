@@ -9,7 +9,6 @@ router.post('/', async (req, res, next) => {
 	let user_name = req.body.name
 	let token
 
-	console.log(index, user_id, user_pw, user_name)
 	try {
 		if(!user_id || !user_pw || !user_name){
 			next("400")

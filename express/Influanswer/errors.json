@@ -30,22 +30,22 @@
         "message": "Internal Server Error"
     },
     "1500" : {
-    "status": 200,
-    "code": 400,
-    "description": "이미 가입되어 있습니다.",
-    "message": "Already Exist"
+        "status": 200,
+        "code": 400,
+        "description": "이미 가입되어 있습니다.",
+        "message": "Already Exist"
     },
     "1501" : {
-    "status": 200,
-    "code": 400,
-    "description": "존재하지 않는 아이디 입니다.",
-    "message": "Non-Existent ID"
+        "status": 200,
+        "code": 400,
+        "description": "존재하지 않는 아이디 입니다.",
+        "message": "Non-Existent ID"
     },
     "1502" : {
-    "status": 200,
-    "code": 400,
-    "description": "비밀번호가 틀렸습니다.",
-    "message": "Invalid PW"
+        "status": 200,
+        "code": 400,
+        "description": "비밀번호가 틀렸습니다.",
+        "message": "Invalid PW"
     },
     "10401": {
         "status": 200,
