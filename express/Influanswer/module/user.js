@@ -89,7 +89,7 @@ module.exports = {
 		if(!(hashedpw.toString('base64') === getPwResult[0].pw)){
 			throw "1502"
 		} else {
-			token = jwt.sign(inf_id, pw, 0)
+			token = jwt.sign(inf_id, 0)
 			let updateTokenQuery =
 			`
 			UPDATE influanswer
@@ -132,7 +132,7 @@ module.exports = {
 		if(!(hashedpw.toString('base64') === getPwResult[0].pw)){
 				throw "1502"
 		} else {
-			token = jwt.sign(adv_id, pw, 1)
+			token = jwt.sign(adv_id, 1)
 			let updateTokenQuery =
 			`
 			UPDATE advertiser
@@ -147,9 +147,15 @@ module.exports = {
 
 	verify : async(token) => {
 		let decoded = jwt.verify(token)
+		let user = {}
 
 		if(decoded == -1){
 			return -1
 		}
+
+		user.id = decoded.id
+		user.index = decoded.index
+
+		return user
 	}
 }

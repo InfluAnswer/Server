@@ -96,5 +96,18 @@ module.exports = {
     }
 
     return returnData
+  },
+
+  pick : async(campaign_id, inf_id, tracking_url) => {
+    let insertContractQuery =
+    `
+    INSERT INTO smartContract(campaign_id, inf_id, tracking_url)
+    VALUES (?, ?, ?)
+    `
+
+    let insertContractResult = await db.queryParamArr(insertContractQuery,[campaign_id, inf_id, tracking_url])
+    if(!insertContractResult){
+      throw "500"
+    }
   }
 }
