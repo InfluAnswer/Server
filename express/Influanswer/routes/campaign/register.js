@@ -6,8 +6,13 @@ const verify = require('../../module/user').verify
 const campaignImageUpload = upload.campaignImageUpload
 
 router.post('/', campaignImageUpload.single('campaign_image'), async (req, res, next) => {
-let user = await verify(req.headers.token)
-
+	let user
+	  try{
+	    user = await verify(req.headers.token)
+	  } catch(err){
+	    next(err)
+	    return
+	  }
 let info = {}
 info.adv_id = user.id
 info.manager_name = req.body.manager_name
@@ -40,7 +45,14 @@ info.campaign_image = req.file.location
 })
 
 router.delete('/', async (req, res, next) => {
-let adv_id = req.user.id
+	let user
+	  try{
+	    user = await verify(req.headers.token)
+	  } catch(err){
+	    next(err)
+	    return
+	  }
+let adv_id = user.id
 let campaign_id = req.body.campaign_id
 
 	try {

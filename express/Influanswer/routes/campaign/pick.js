@@ -4,8 +4,13 @@ const campaign = require('../../module/campaign')
 const verify = require('../../module/user').verify
 
 router.post('/', async (req, res, next) => {
-  let user = await verify(req.headers.token)
-
+  let user
+    try{
+      user = await verify(req.headers.token)
+    } catch(err){
+      next(err)
+      return
+    }
   let campaign_id = req.body.campaign_id
   let inf_id = user.id
   let tracking_url = req.body.tracking_url

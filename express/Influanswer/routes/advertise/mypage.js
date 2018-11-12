@@ -6,7 +6,13 @@ const verify = require('../../module/user').verify
 const upload = require('../../config/s3multer')
 const registerImageUpload = upload.registerImageUpload
 router.get('/', async (req, res, next) => {
-  let user = await verify(req.headers.token)
+let user
+  try{
+    user = await verify(req.headers.token)
+  } catch(err){
+    next(err)
+    return
+  }
   let adv_id = user.id
   let returnData
   console.log(adv_id)
@@ -27,7 +33,13 @@ router.get('/', async (req, res, next) => {
 })
 
 router.post('/', registerImageUpload.single('register_image'), async (req, res, next) => {
-  let user = await verify(req.headers.token)
+  let user
+    try{
+      user = await verify(req.headers.token)
+    } catch(err){
+      next(err)
+      return
+    }
   let adv_id = user.id
 
   let info = {}
