@@ -46,13 +46,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use(async (req, res, next) => {
-//   let result = await user.verify(req.headers.token)
+app.use(async (req, res, next) => {
+  let result = await user.verify(req.headers.token)
 
-//   if(!result){
-//     next("10401")
-//   }
-// });
+  if(!result){
+    next("10401")
+  }
+  req.user = result
+  next();
+});
 
 app.use('/', indexRouter);
 // error handler

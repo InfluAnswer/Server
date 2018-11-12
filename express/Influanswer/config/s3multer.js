@@ -5,10 +5,10 @@ aws.config.loadFromPath('./config/s3config.json');
 const s3 = new aws.S3();
 
 //버킷 하나 만들기
-const uploadContentImage = multer({
+const upload = multer({
     storage: multerS3({
         s3: s3,
-        bucket: 'influasnwer',
+        bucket: 'influanswer',
         acl: 'public-read-write',
         key: function(req, file, cb) {
             cb(null, Date.now() + '.' + file.originalname);
@@ -16,6 +16,4 @@ const uploadContentImage = multer({
     })
 });
 
-module.exports ={
-    uploadContentImage : uploadContentImage
-};
+module.exports = upload

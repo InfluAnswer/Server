@@ -109,5 +109,33 @@ module.exports = {
     if(!insertContractResult){
       throw "500"
     }
+  },
+
+  //only advertiser
+  register : async(info) => {
+    let insertCampaignQuery =
+    `
+    INSERT INTO campaign(adv_id, manager_name, phone_number, type, start_date, end_date, budget, reward, name, URL, description)
+    VALUES (?, ?, ?, ?, ? ,?, ?, ?, ?, ?, ?)
+    `
+    console.log(info)
+    let insertCampaignResult = await db.queryParamArr(insertCampaignQuery, [info.adv_id, info.manager_name, info.phone_number, info.type, info.start_date, info.end_date, info.budget, info.reward, info.name, info.URL, info.description])
+    if(!insertCampaignResult){
+      throw "500"
+    }
+  },
+
+  delete : async(adv_id, campaign_id) => {
+    let deleteCampaignQuery =
+    `
+    delete
+    FROM campaign
+    WHERE adv_id = ? AND campaign_id = ?
+    `
+
+    let deleteCampaignResult = await db.queryParamArr(deleteCampaignQuery, [adv_id, campaign_id])
+    if(!deleteCampaignResult){
+      throw "500"
+    }
   }
 }
