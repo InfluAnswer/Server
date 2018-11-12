@@ -150,6 +150,10 @@ module.exports = {
 	// }
 
 	verify : async(token) => {
+		if(!token){
+			throw "10401"
+		}
+		
 		let decoded = jwt.verify(token)
 		let user = {}
 
@@ -163,7 +167,7 @@ module.exports = {
 		if(!user){
 			throw "10401"
 		}
-		
+
 		return user
 	},
 
