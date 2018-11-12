@@ -3,7 +3,7 @@ const router = express.Router()
 const advertiseModule = require('../../module/advertise')
 const multer = require('multer')
 const upload = require('../../config/s3multer')
-
+const registerImageUpload = upload.registerImageUpload
 router.get('/', async (req, res, next) => {
   let adv_id = req.user.id
   let returnData
@@ -23,7 +23,7 @@ router.get('/', async (req, res, next) => {
 	res.r(returnData)
 })
 
-router.post('/', upload.single('register_image'), async (req, res, next) => {
+router.post('/', registerImageUpload.single('register_image'), async (req, res, next) => {
   let info = {}
   info.adv_id = req.user.id
   info.company_name = req.body.company_name

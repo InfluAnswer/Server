@@ -1,9 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const campaign = require('../../module/campaign')
+const upload = require('../../config/s3multer')
+const campaignImageUpload = upload.campaignImageUpload
 
-router.post('/', async (req, res, next) => {
+router.post('/', campaignImageUpload.single('campaign_image'), async (req, res, next) => {
 //let adv_id = req.user.id
+console.log("asdasd")
 let info = {}
 info.adv_id = req.user.id
 info.manager_name = req.body.manager_name
@@ -16,10 +19,11 @@ info.reward = req.body.reward
 info.name = req.body.name
 info.URL = req.body.URL
 info.description = req.body.description
+info.campaign_image = req.file.location
 
 	try {
     if(!info.manager_name || !info.phone_number || !info.start_date || !info.end_date
-    || !info.budget || !info.name || !info.URL || !info.description){
+    || !info.budget || !info.name || !info.URL || !info.description || !info.campaign_image){
       next("400")
       return
     }

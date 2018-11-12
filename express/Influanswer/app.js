@@ -49,7 +49,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(async (req, res, next) => {
   let result = await user.verify(req.headers.token)
 
-  if(!result){
+  if(!result || result == -1){
     next("10401")
   }
   req.user = result

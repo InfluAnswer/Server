@@ -145,6 +145,10 @@ module.exports = {
 		return token
 	},
 
+	// pwChange : asnyc(token) => {
+	//
+	// }
+
 	verify : async(token) => {
 		let decoded = jwt.verify(token)
 		let user = {}
