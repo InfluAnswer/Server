@@ -2,13 +2,14 @@ const express = require('express')
 const router = express.Router()
 const campaign = require('../../module/campaign')
 const upload = require('../../config/s3multer')
+const verify = require('../../module/user').verify
 const campaignImageUpload = upload.campaignImageUpload
 
 router.post('/', campaignImageUpload.single('campaign_image'), async (req, res, next) => {
-//let adv_id = req.user.id
-console.log("asdasd")
+let user = await verify(req.headers.token)
+
 let info = {}
-info.adv_id = req.user.id
+info.adv_id = user.id
 info.manager_name = req.body.manager_name
 info.phone_number = req.body.phone_number
 info.type = req.body.type

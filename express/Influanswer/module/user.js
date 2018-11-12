@@ -160,6 +160,12 @@ module.exports = {
 		user.id = decoded.id
 		user.index = decoded.index
 
+		if(!user){
+			throw "10401"
+		}
+		
 		return user
-	}
+	},
+
+
 }
