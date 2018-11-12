@@ -1,8 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const campaign = require('../../../module/campaign')
+const verify = require('../../../module/user').verify
 
 router.post('/', async (req, res, next) => {
+  await verify(req.headers.token)
+
   let types = req.body.types
   let keyword = req.body.keyword
   let data

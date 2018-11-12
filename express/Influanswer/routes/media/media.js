@@ -1,9 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const mediaModule = require('../../module/media.js')
+const verify = require('../../module/user').verify
 
 router.get('/', async(req, res, next) => {
-let inf_id = req.user.id // warning : user_index(광고주인지 인플루언서인지) 식별 안함
+let user = await verify(req.headers.token)
+let inf_id = user.id // warning : user_index(광고주인지 인플루언서인지) 식별 안함
 let returnData
 
   try {
