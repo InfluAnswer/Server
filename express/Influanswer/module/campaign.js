@@ -56,7 +56,7 @@ module.exports = {
       selectContentQuery =
       `
       SELECT *
-      FROM campain
+      FROM campaign
       WHERE name LIKE "%"?"%"
       `
     } else {
