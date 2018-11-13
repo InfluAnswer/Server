@@ -23,11 +23,12 @@ setInterval(async function query(){
 		console.log("module query_1 error")
 		return
 	}
-	selectContractAddressResult.forEach((element, idx) => {
-		request.post('http://localhost:3000/transaction/migrate_queue').form({contractTransaction : element.contractTransaction})
-	})
 
-}, 3000)
+	for(i in selectContractAddressResult){
+		request.post('http://localhost:3000/transaction/migrate_queue').form({contractTransaction : selectContractAddressResult[i].contractTransaction})
+	}
+
+}, 5000)
 
 setInterval(async function query(){
 	let selectToMigrateResult = await db.queryParamNone(selectToMigrateQuery)
@@ -35,8 +36,9 @@ setInterval(async function query(){
 		console.log("module query_2 error")
 		return
 	}
-	selectToMigrateResult.forEach((element, idx) => {
-		request.post('http://localhost:3000/transaction/migrate').form({contract_id : element.contract_id})
-	})
+
+	for(i in selectToMigrateResult){
+		request.post('http://localhost:3000/transaction/migrate').form({contract_id : selectToMigrateResult[i].contract_id})
+	}
 
 }, 10000)
