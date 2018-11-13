@@ -21,7 +21,7 @@ router.post('/', async (req, res, next) => {
       return
     }
 
-    campaign.pick(campaign_id, inf_id, tracking_url)
+    await campaign.pick(campaign_id, inf_id, tracking_url)
 	} catch(err) {
 		next(err)
 		return
