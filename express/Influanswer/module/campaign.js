@@ -90,6 +90,9 @@ module.exports = {
       form.type = selectContentResult[i].type
       form.reward = selectContentResult[i].reward
       form.description = selectContentResult[i].description
+      form.start_date = selectContentResult[i].start_date
+      form.end_date = selectContentResult[i].end_date
+      form.URL = selectContentResult[i].URL
       form.image = selectContentResult[i].image
 
       returnData.push(form)
