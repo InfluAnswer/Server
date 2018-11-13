@@ -23,7 +23,7 @@ setInterval(async function query(){
 		return
 	}
 
-	for(i in selectToMigrateResult){
+	for(i in selectContractAddressResult){
 		request.post('http://localhost:3000/transaction/migrate_queue').form({contractTransaction : selectContractAddressResult[i].contractTransaction})
 	}
 
