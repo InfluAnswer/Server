@@ -53,7 +53,7 @@ setInterval(async function query(){
 		// 											`, selectToMigrateResult[i].contract_id)
 		console.log(selectToMigrateResult[i].contract_id)
 		option.body.contract_id = selectToMigrateResult[i].contract_id
-		request(options)
+		request(option)
 		.then(function(res) {
 			console.log(res)
 		})
