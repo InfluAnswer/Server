@@ -10,7 +10,7 @@ const selectToMigrateQuery = // hits = 0 , conversionAction = 0 -> 생성된지 
 `
 SELECT contract_id
 FROM smartContract
-WHERE hits = 0 AND conversionAction = 0 AND isQueue = 0 AND contract_id NOT IN (
+WHERE hits = 0 AND conversionAction = 0 AND contract_id NOT IN (
 	SELECT contract_id
 	FROM contractTransaction
 )
@@ -37,10 +37,10 @@ setInterval(async function query(){
 	}
 
 	for(i in selectToMigrateResult){
-		await db.queryParamArr(`UPDATE smartContract
-														SET isQueue = 1
-														WHERE contract_id = ?
-													`, selectToMigrateResult[i].contract_id)
+		// await db.queryParamArr(`UPDATE smartContract
+		// 												SET isQueue = 1
+		// 												WHERE contract_id = ?
+		// 											`, selectToMigrateResult[i].contract_id)
 		request.post('http://localhost:3000/transaction/migrate').form({contract_id : selectToMigrateResult[i].contract_id})
 	}
 
