@@ -27,7 +27,7 @@ setInterval(async function query(){
 		request.post('http://localhost:3000/transaction/migrate_queue').form({contractTransaction : selectContractAddressResult[i].contractTransaction})
 	}
 
-}, 5000)
+}, 60000)
 
 setInterval(async function query(){
 	let selectToMigrateResult = await db.queryParamNone(selectToMigrateQuery)
@@ -44,4 +44,4 @@ setInterval(async function query(){
 		request.post('http://localhost:3000/transaction/migrate').form({contract_id : selectToMigrateResult[i].contract_id})
 	}
 
-}, 10000)
+}, 60000)
