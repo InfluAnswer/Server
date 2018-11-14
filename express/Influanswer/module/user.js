@@ -89,7 +89,7 @@ module.exports = {
 		if(!(hashedpw.toString('base64') === getPwResult[0].pw)){
 			throw "1502"
 		} else {
-			token = jwt.sign(inf_id, 0)
+			token = jwt.sign(inf_id, "0")
 			let updateTokenQuery =
 			`
 			UPDATE influanswer
@@ -132,7 +132,7 @@ module.exports = {
 		if(!(hashedpw.toString('base64') === getPwResult[0].pw)){
 				throw "1502"
 		} else {
-			token = jwt.sign(adv_id, 1)
+			token = jwt.sign(adv_id, "1")
 			let updateTokenQuery =
 			`
 			UPDATE advertiser
@@ -153,7 +153,7 @@ module.exports = {
 		if(!token){
 			throw "10401"
 		}
-		
+
 		let decoded = jwt.verify(token)
 		let user = {}
 
@@ -170,6 +170,33 @@ module.exports = {
 
 		return user
 	},
+
+	logout_inf : async(inf_id, token) => {
+		let updateStateQuery =
+		`
+		UPDATE influanswer
+		SET token = ?
+		WHERE inf_id = ? AND token = ?
+		`
+
+		let updateStateResult = await db.queryParamArr(updateStateQuery, [null, inf_id, token])
+		if(!updateStateResult){
+			throw "500"
+		}
+	},
+
+	logout_adv : async(adv_id, token) => {
+		let updateStateQuery =
+		`
+		UPDATE advertiser
+		SET token = ?
+		WHERE adv_id = ? AND token = ?
+		`
+		let updateStateResult = await db.queryParamArr(updateStateQuery, [null, adv_id, token])
+		if(!updateStateResult){
+			throw "500"
+		}
+	}
 
 
 }

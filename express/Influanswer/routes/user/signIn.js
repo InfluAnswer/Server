@@ -9,7 +9,7 @@ router.post('/', async (req, res, next) => {
 	let token
 
 	try {
-		if(!user_id || !user_pw){
+		if(!user_id || !user_pw || !index){
 			next("400")
 			return
 		}
@@ -19,7 +19,7 @@ router.post('/', async (req, res, next) => {
 		} else {
 			token = await user.signIn_Adv(user_id, user_pw)
 		}
-		
+
 	} catch(err) {
 		next(err)
 		return
