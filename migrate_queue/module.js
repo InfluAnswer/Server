@@ -23,7 +23,7 @@ setInterval(async function query(){
 		return
 	}
 
-	for(var i ; selectContractAddressResult.length ; i++){
+	for(var i = 0 ; selectContractAddressResult.length ; i++){
 		request.post('http://localhost:3000/transaction/migrate_queue').form({contractTransaction : selectContractAddressResult[i].contractTransaction})
 	}
 
@@ -36,7 +36,7 @@ setInterval(async function query(){
 		return
 	}
 
-	for(var i ; selectToMigrateResult.length ; i++){
+	for(var i = 0 ; selectToMigrateResult.length ; i++){
 		// await db.queryParamArr(`UPDATE smartContract
 		// 												SET isQueue = 1
 		// 												WHERE contract_id = ?
