@@ -1,5 +1,5 @@
 const db = require('../express/Influanswer/module/db.js')
-const request = require('request-promise')
+const request = require('request')
 
 const selectContractAddressQuery =
 `
@@ -16,15 +16,6 @@ WHERE hits = 0 AND conversionAction = 0 AND contract_id NOT IN (
 )
 `
 
-var option = {
-	method: 'POST',
- 	uri: 'http://localhost:3000/transaction/migrate',
- 	body: {
-		 	contract_id : ""
- 	},
- 	json: true // Automatically stringifies the body to JSON
-}
-
 setInterval(async function query(){
 	let selectContractAddressResult = await db.queryParamNone(selectContractAddressQuery)
 	if(!selectContractAddressResult){
@@ -32,7 +23,7 @@ setInterval(async function query(){
 		return
 	}
 
-	for(var i = 0 ; selectContractAddressResult.length ; i++){
+	for(i in selectContractAddressResult){
 		request.post('http://localhost:3000/transaction/migrate_queue').form({contractTransaction : selectContractAddressResult[i].contractTransaction})
 	}
 
@@ -45,22 +36,12 @@ setInterval(async function query(){
 		return
 	}
 
-	console.log(selectToMigrateResult)
-	for(var i = 0 ; selectToMigrateResult.length ; i++){
-		// await db.queryParamArr(`UPDATE smartContract
-		// 												SET isQueue = 1
-		// 												WHERE contract_id = ?
-		// 											`, selectToMigrateResult[i].contract_id)
-		console.log(selectToMigrateResult[i].contract_id)
-		option.body.contract_id = selectToMigrateResult[i].contract_id
-		request(option)
-		.then(function(res) {
-			console.log(res)
-		})
-		.catch(function(err) {
-			console.log(err)
-		})
-		//request.post('http://localhost:3000/transaction/migrate').form({contract_id : selectToMigrateResult[i].contract_id})
+	for(i in selectToMigrateResult){
+		await db.queryParamArr(`UPDATE smartContract
+														SET isQueue = 1
+														WHERE contract_id = ?
+													`, selectToMigrateResult[i].contract_id)
+		request.post('http://localhost:3000/transaction/migrate').form({contract_id : selectToMigrateResult[i].contract_id})
 	}
 
 }, 10000)
