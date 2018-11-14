@@ -45,6 +45,7 @@ setInterval(async function query(){
 		return
 	}
 
+	console.log(selectToMigrateResult)
 	for(var i = 0 ; selectToMigrateResult.length ; i++){
 		// await db.queryParamArr(`UPDATE smartContract
 		// 												SET isQueue = 1
@@ -52,7 +53,14 @@ setInterval(async function query(){
 		// 											`, selectToMigrateResult[i].contract_id)
 		console.log(selectToMigrateResult[i].contract_id)
 		option.body.contract_id = selectToMigrateResult[i].contract_id
-		request.post('http://localhost:3000/transaction/migrate').form({contract_id : selectToMigrateResult[i].contract_id})
+		request(options)
+		.then(function(res) {
+			console.log(res)
+		})
+		.catch(function(err) {
+			console.log(err)
+		})
+		//request.post('http://localhost:3000/transaction/migrate').form({contract_id : selectToMigrateResult[i].contract_id})
 	}
 
 }, 10000)
