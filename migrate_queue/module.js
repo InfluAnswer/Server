@@ -1,5 +1,5 @@
 const db = require('../express/Influanswer/module/db.js')
-const request = require('request')
+const request = require('async-request')
 
 const selectContractAddressQuery =
 `
@@ -24,7 +24,7 @@ setInterval(async function query(){
 	}
 
 	for(var i = 0 ; selectContractAddressResult.length ; i++){
-		request.post('http://localhost:3000/transaction/migrate_queue').form({contractTransaction : selectContractAddressResult[i].contractTransaction})
+		await request.post('http://localhost:3000/transaction/migrate_queue').form({contractTransaction : selectContractAddressResult[i].contractTransaction})
 	}
 
 }, 5000)
@@ -41,7 +41,7 @@ setInterval(async function query(){
 		// 												SET isQueue = 1
 		// 												WHERE contract_id = ?
 		// 											`, selectToMigrateResult[i].contract_id)
-		request.post('http://localhost:3000/transaction/migrate').form({contract_id : selectToMigrateResult[i].contract_id})
+		await request.post('http://localhost:3000/transaction/migrate').form({contract_id : selectToMigrateResult[i].contract_id})
 	}
 
 }, 10000)
