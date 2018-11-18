@@ -62,6 +62,7 @@ module.exports = {
       let contract = web3.eth.contract(contractJson['abi']).at(contractAddress)
 
       let contractResult = contract.getAction()
+      console.log(contractResult)
       let conversionAction = {
         action : contractResult[0].c[0],
         hits : contractResult[1].c[0],
@@ -73,6 +74,14 @@ module.exports = {
 
     write : async(gas, contractAddress, action, hits) => {
       let contract = web3.eth.contract(contractJson['abi']).at(contractAddress)
+
+      let contractResult = contract.getAction()
+
+      console.log(contractResult)
+      if(contractResult[0].c[0] > action || contractResult[1].c[0] > hits){
+        throw "1404"
+      }
+
       let transactionHash = contract.setAction(action, hits,{from : web3.eth.accounts[0], gas : gas})
 
       console.log(transactionHash)
@@ -106,10 +115,16 @@ module.exports = {
 
       let writeTransactionQuery =
       `
-      INSERT INTO transaction(contractTransaction, transaction)
-      VALUES (?, ?)
+      INSERT INTO transaction(contractTransaction, transaction, orders)
+      VALUES (?, ?,
+      (
+      SELECT count(*) + 1
+      FROM transaction as A
+      WHERE contractTransaction = ?
+      )
+             )
       `
-      let writeTransactionResult = await db.queryParamArr(writeTransactionQuery, [contractTransactionResult[0].contractTransaction, transactionHash])
+      let writeTransactionResult = await db.queryParamArr(writeTransactionQuery, [contractTransactionResult[0].contractTransaction, transactionHash, contractTransactionResult[0].contractTransaction])
       if(!writeTransactionResult){
         return undefined
       }
@@ -117,7 +132,25 @@ module.exports = {
       return transactionHash
     },
 
-    history : async(page, transactionHash) => {
+    history : async(page, contractTransaction) => {
+      let getTransactionHashQuery =
+      `
+      SELECT transaction
+      FROM transaction
+      WHERE contractTransaction = ? AND orders = ?
+      `
+
+      let getTransactionHashResult = await db.queryParamArr(getTransactionHashQuery, [contractTransaction, page])
+      if(!getTransactionHashResult){
+        throw "500"
+      }
+
+      if(getTransactionHashResult.length == 0){
+        throw "1405"
+      }
+
+      let transactionHash = getTransactionHashResult[0].transaction
+
       let input = web3.eth.getTransaction(transactionHash).input
       let action = input.substr(10, 64)
       let hits = input.substr(74, 64)
