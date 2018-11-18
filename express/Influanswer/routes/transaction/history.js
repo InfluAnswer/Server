@@ -4,7 +4,7 @@ const transactionModule = require('../../module/transaction.js')
 
 router.get('/', async(req, res, next) => {
   let page = req.query.page
-  let transactionHash = req.query.transactionHash
+  let contractTransaction = req.query.contractTransaction
   let conversionAction
 
   try {
@@ -13,7 +13,7 @@ router.get('/', async(req, res, next) => {
   		return
   	}
 
-	conversionAction = await transactionModule.history(page, transactionHash)
+	conversionAction = await transactionModule.history(page, contractTransaction)
   } catch(err) {
   	next(err)
   	return

@@ -24,6 +24,16 @@
         "description": "블록 동기화 중입니다.",
         "message": "Block Syncronization"
     },
+    "1404": {
+        "status": 200,
+        "description": "[변조위험] 최신 값 보다 작습니다.",
+        "message": "Invalid Conversion Action!"
+    },
+    "1405": {
+        "status": 200,
+        "description": "page수 또는 contractTransaction 값이 잘못되었습니다.",
+        "message": "Invalid Value"
+    },
     "500": {
         "status": 500,
         "description": "서버 오류",
