@@ -140,5 +140,79 @@ module.exports = {
 
       contractAddress = transactionReceipt.contractAddress
       return contractAddress
+    },
+    mycontract_inf : async(inf_id) => {
+      let returnData = new Array()
+
+      let getContractInfoQuery =
+      `
+      SELECT *
+      FROM (smartContract JOIN campaign USING (campaign_id)) JOIN contractTransaction USING(contract_id)
+      WHERE inf_id = ?
+      `
+
+      let getContractInfoResult = await db.queryParamArr(getContractInfoQuery, inf_id)
+      if(!getContractInfoResult){
+        throw "500"
+      }
+
+      for(i in getContractInfoResult){
+        let form = {}
+
+        form.contract_id = getContractInfoResult[0].contract_id
+        form.campaign_id = getContractInfoResult[0].campaign_id
+        form.inf_id = getContractInfoResult[0].inf_id
+        form.adv_id = getContractInfoResult[0].adv_id
+        form.type = getContractInfoResult[0].type
+        form.reward = getContractInfoResult[0].reward
+        form.start_date = getContractInfoResult[0].start_date
+        form.end_date = getContractInfoResult[0].end_date
+        form.image = getContractInfoResult[0].image
+        form.hits = getContractInfoResult[0].hits
+        form.conversionAction = getContractInfoResult[0].conversionAction
+        form.contractAddress = getContractInfoResult[0].contractAddress
+        form.contractTransaction = getContractInfoResult[0].contractTransaction
+
+        returnData.push(form)
+      }
+
+      return returnData
+    },
+    mycontract_adv : async(adv_id) => {
+      let returnData = new Array()
+
+      let getContractInfoQuery =
+      `
+      SELECT *
+      FROM (smartContract JOIN campaign USING (campaign_id)) JOIN contractTransaction USING(contract_id)
+      WHERE adv_id = ?
+      `
+
+      let getContractInfoResult = await db.queryParamArr(getContractInfoQuery, adv_id)
+      if(!getContractInfoResult){
+        throw "500"
+      }
+
+      for(i in getContractInfoResult){
+        let form = {}
+
+        form.contract_id = getContractInfoResult[0].contract_id
+        form.campaign_id = getContractInfoResult[0].campaign_id
+        form.inf_id = getContractInfoResult[0].inf_id
+        form.adv_id = getContractInfoResult[0].adv_id
+        form.type = getContractInfoResult[0].type
+        form.reward = getContractInfoResult[0].reward
+        form.start_date = getContractInfoResult[0].start_date
+        form.end_date = getContractInfoResult[0].end_date
+        form.image = getContractInfoResult[0].image
+        form.hits = getContractInfoResult[0].hits
+        form.conversionAction = getContractInfoResult[0].conversionAction
+        form.contractAddress = getContractInfoResult[0].contractAddress
+        form.contractTransaction = getContractInfoResult[0].contractTransaction
+
+        returnData.push(form)
+      }
+
+      return returnData
     }
 }
