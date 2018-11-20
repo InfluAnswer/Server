@@ -121,7 +121,6 @@ module.exports = {
     INSERT INTO campaign(adv_id, manager_name, phone_number, type, start_date, end_date, budget, reward, name, URL, description, image)
     VALUES (?, ?, ?, ?, ? ,?, ?, ?, ?, ?, ?, ?)
     `
-    console.log(info)
     let insertCampaignResult = await db.queryParamArr(insertCampaignQuery, [info.adv_id, info.manager_name, info.phone_number, info.type, info.start_date, info.end_date, info.budget, info.reward, info.name, info.URL, info.description, info.campaign_image])
     if(!insertCampaignResult){
       throw "500"
