@@ -40,10 +40,9 @@ router.post('/', registerImageUpload.single('register_image'), async (req, res, 
       next(err)
       return
     }
-  let adv_id = user.id
 
   let info = {}
-  info.adv_id = req.user.id
+  info.adv_id = user.id
   info.company_name = req.body.company_name
   info.company_cate = req.body.company_cate
   info.representative = req.body.representative
