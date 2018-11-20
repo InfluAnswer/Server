@@ -33,7 +33,7 @@ info.campaign_image = req.file.location
       next("400")
       return
     }
-
+		console.log(info)
     await campaign.register(info)
 
 	} catch(err) {

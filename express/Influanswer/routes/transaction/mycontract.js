@@ -3,7 +3,7 @@ const router = express.Router()
 const transactionModule = require('../../module/transaction.js')
 const verify = require('../../module/user').verify
 
-router.post('/', async(req, res, next) => {
+router.get('/', async(req, res, next) => {
   let user
     try{
       user = await verify(req.headers.token)
