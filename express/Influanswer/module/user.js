@@ -76,7 +76,7 @@ module.exports = {
 
 		let getPwQuery =
 		`
-		SELECT pw, salt
+		SELECT pw, salt, name
 		FROM influanswer
 		WHERE inf_id = ?
 		`
@@ -89,12 +89,12 @@ module.exports = {
 		if(!(hashedpw.toString('base64') === getPwResult[0].pw)){
 			throw "1502"
 		} else {
-			token = jwt.sign(inf_id, "0")
+			token = jwt.sign(inf_id,  getPwResult[0].name, "0")
 			let updateTokenQuery =
 			`
 			UPDATE influanswer
 			SET token = ?
-			WHERE inf_id = ? AND PW = ?
+			WHERE inf_id = ? AND pw = ?
 			`
 			let updateTokenResult = await db.queryParamArr(updateTokenQuery, [token, inf_id, hashedpw.toString('base64')])
 		}
@@ -118,7 +118,7 @@ module.exports = {
 
 		let getPwQuery =
 		`
-		SELECT pw, salt
+		SELECT pw, salt, name
 		FROM advertiser
 		WHERE adv_id = ?
 		`
@@ -132,7 +132,7 @@ module.exports = {
 		if(!(hashedpw.toString('base64') === getPwResult[0].pw)){
 				throw "1502"
 		} else {
-			token = jwt.sign(adv_id, "1")
+			token = jwt.sign(adv_id, getPwResult[0].name, "1")
 			let updateTokenQuery =
 			`
 			UPDATE advertiser

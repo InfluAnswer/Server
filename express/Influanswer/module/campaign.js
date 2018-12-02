@@ -113,8 +113,8 @@ module.exports = {
 
     let checkDuplicationResult = await db.queryParamArr(checkDuplicationQuery, campaign_id)
     if(checkDuplicationResult[0].SUCCESS){
-      throw "1503" 
-    }    
+      throw "1503"
+    }
 
     let insertContractQuery =
     `
