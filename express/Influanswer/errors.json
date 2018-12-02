@@ -57,6 +57,12 @@
         "description": "비밀번호가 틀렸습니다.",
         "message": "Invalid PW"
     },
+    "1503" : {
+        "status": 200,
+        "code": 400,
+        "description": "이미 계약한 상품입니다.",
+        "message": "Already Contracted Product"
+    },
     "10401": {
         "status": 200,
         "code": 403,

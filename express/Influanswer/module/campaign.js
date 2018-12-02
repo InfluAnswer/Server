@@ -102,6 +102,20 @@ module.exports = {
   },
 
   pick : async(campaign_id, inf_id, tracking_url) => {
+    let checkDuplicationQuery =
+    `
+    SELECT EXISTS (
+		SELECT *
+		FROM smartContract
+		WHERE campaign_id = ?
+		) AS SUCCESS
+    `
+
+    let checkDuplicationResult = await db.queryParamArr(checkDuplicationQuery, campaign_id)
+    if(checkDuplicationResult[0].SUCCESS){
+      throw "1503" 
+    }    
+
     let insertContractQuery =
     `
     INSERT INTO smartContract(campaign_id, inf_id, tracking_url)
