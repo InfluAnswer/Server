@@ -143,7 +143,18 @@ module.exports = {
 		if(!(hashedpw.toString('base64') === getPwResult[0].pw)){
 				throw "1502"
 		} else {
-			token = jwt.sign(adv_id, "1")
+			let getNameQuery =
+			`
+			SELECT name
+			FROM advertiser
+			WHERE adv_id = ? AND PW = ?
+			`
+			let getNameResult = await db.queryParamArr(getNameQuery, [adv_idx, hashedpw.toString('base64')])
+			if(!getNameResult){
+				throw "500"
+			}
+
+			token = jwt.sign(adv_id, getNameResult[0].name, "1")
 			let updateTokenQuery =
 			`
 			UPDATE advertiser
