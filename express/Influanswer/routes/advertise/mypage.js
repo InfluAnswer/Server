@@ -33,16 +33,10 @@ let user
 })
 
 router.post('/', registerImageUpload.single('register_image'), async (req, res, next) => {
-  let user
-    try{
-      user = await verify(req.headers.token)
-    } catch(err){
-      next(err)
-      return
-    }
+  let user_id = req.body.user_id
 
   let info = {}
-  info.adv_id = user.id
+  info.adv_id = user_id
   info.company_name = req.body.company_name
   info.company_cate = req.body.company_cate
   info.representative = req.body.representative

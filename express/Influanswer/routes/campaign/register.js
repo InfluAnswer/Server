@@ -5,16 +5,9 @@ const upload = require('../../config/s3multer')
 const verify = require('../../module/user').verify
 const campaignImageUpload = upload.campaignImageUpload
 
-router.post('/', campaignImageUpload.single('campaign_image'), async (req, res, next) => {
-	let user
-	  try{
-	    user = await verify(req.headers.token)
-	  } catch(err){
-	    next(err)
-	    return
-	  }
+router.post('/', campaignImageUpload.single('campaign_image'), async (req, res, next) =>{
 let info = {}
-info.adv_id = user.id
+info.adv_id = req.body.user_id
 info.manager_name = req.body.manager_name
 info.phone_number = req.body.phone_number
 info.type = req.body.type
@@ -26,6 +19,7 @@ info.name = req.body.name
 info.URL = req.body.URL
 info.description = req.body.description
 info.campaign_image = req.file.location
+
 
 	try {
     if(!info.manager_name || !info.phone_number || !info.start_date || !info.end_date

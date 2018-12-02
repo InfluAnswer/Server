@@ -4,12 +4,6 @@ const campaign = require('../../../module/campaign')
 const verify = require('../../../module/user').verify
 
 router.post('/', async (req, res, next) => {
-  try{
-      await verify(req.headers.token)
-    } catch(err){
-      next(err)
-      return
-    }
   let types = req.body.types
   let data
 

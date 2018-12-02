@@ -10,6 +10,28 @@ var indexRouter = require('./routes/index');
 
 var app = express();
 
+var whitelist = ['https://www.influanswerapi.cf']
+
+
+
+var corsOptions = {
+
+  origin: function(origin, callback){
+
+  var isWhitelisted = whitelist.indexOf(origin) !== -1;
+
+  callback(null, isWhitelisted); 
+
+  // callback expects two parameters: error and options 
+
+  },
+
+  credentials:true
+
+}
+
+app.use(cors());
+
 app.use((req, res, next) => {
   res.r = (result) => {
       //result가 있을 때
@@ -37,8 +59,6 @@ app.use((req, res, next) => {
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
-app.use(cors());
 
 app.use(logger('dev'));
 app.use(express.json());
