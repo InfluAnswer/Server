@@ -76,7 +76,7 @@ module.exports = {
 
 		let getPwQuery =
 		`
-		SELECT pw, salt
+		SELECT pw, salt, name
 		FROM influanswer
 		WHERE inf_id = ?
 		`
@@ -89,23 +89,12 @@ module.exports = {
 		if(!(hashedpw.toString('base64') === getPwResult[0].pw)){
 			throw "1502"
 		} else {
-			let getNameQuery =
-			`
-			SELECT name
-			FROM Influanswer
-			WHERE inf_id = ? AND PW = ?
-			`
-			let getNameResult = await db.queryParamArr(getNameQuery, [inf_idx, hashedpw.toString('base64')])
-			if(!getNameResult){
-				throw "500"
-			}
-
-			token = jwt.sign(inf_id, getNameResult[0].name, "0")
+			token = jwt.sign(inf_id,  getPwResult[0].name, "0")
 			let updateTokenQuery =
 			`
 			UPDATE influanswer
 			SET token = ?
-			WHERE inf_id = ? AND PW = ?
+			WHERE inf_id = ? AND pw = ?
 			`
 			let updateTokenResult = await db.queryParamArr(updateTokenQuery, [token, inf_id, hashedpw.toString('base64')])
 		}
@@ -129,7 +118,7 @@ module.exports = {
 
 		let getPwQuery =
 		`
-		SELECT pw, salt
+		SELECT pw, salt, name
 		FROM advertiser
 		WHERE adv_id = ?
 		`
@@ -143,18 +132,7 @@ module.exports = {
 		if(!(hashedpw.toString('base64') === getPwResult[0].pw)){
 				throw "1502"
 		} else {
-			let getNameQuery =
-			`
-			SELECT name
-			FROM advertiser
-			WHERE adv_id = ? AND PW = ?
-			`
-			let getNameResult = await db.queryParamArr(getNameQuery, [adv_idx, hashedpw.toString('base64')])
-			if(!getNameResult){
-				throw "500"
-			}
-
-			token = jwt.sign(adv_id, getNameResult[0].name, "1")
+			token = jwt.sign(adv_id, getPwResult[0].name, "1")
 			let updateTokenQuery =
 			`
 			UPDATE advertiser
