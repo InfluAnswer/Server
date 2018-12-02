@@ -89,7 +89,18 @@ module.exports = {
 		if(!(hashedpw.toString('base64') === getPwResult[0].pw)){
 			throw "1502"
 		} else {
-			token = jwt.sign(inf_id, "0")
+			let getNameQuery =
+			`
+			SELECT name
+			FROM Influanswer
+			WHERE inf_id = ? AND PW = ?
+			`
+			let getNameResult = await db.queryParamArr(getNameQuery, [inf_idx, hashedpw.toString('base64')])
+			if(!getNameResult){
+				throw "500"
+			}
+
+			token = jwt.sign(inf_id, getNameResult[0].name, "0")
 			let updateTokenQuery =
 			`
 			UPDATE influanswer
