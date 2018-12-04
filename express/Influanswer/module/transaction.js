@@ -46,7 +46,7 @@ module.exports = {
       let StorageContract = web3.eth.contract(abiDefinition)
       let byteCode = compiledCode.contracts[':conversionAction'].bytecode
       let deployedContract = StorageContract.new(contract_id ,{data: "0x" + byteCode, from: web3.eth.accounts[0], gas: 4700000})
-
+      console.log(deployedContract)
       let insertAddressQuery =
       `
       INSERT INTO contractTransaction(contractTransaction, contract_id)
