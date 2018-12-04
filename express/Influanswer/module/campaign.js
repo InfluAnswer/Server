@@ -107,9 +107,10 @@ module.exports = {
     SELECT EXISTS (
 		SELECT *
 		FROM smartContract
-		WHERE campaign_id = ?
+		WHERE campaign_id = ? AND inf_id = ?
 		) AS SUCCESS
     `
+    console.log(campaign_id, inf_id)
 
     let checkDuplicationResult = await db.queryParamArr(checkDuplicationQuery, campaign_id)
     if(checkDuplicationResult[0].SUCCESS){
