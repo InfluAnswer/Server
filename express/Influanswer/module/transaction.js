@@ -77,8 +77,23 @@ module.exports = {
 
       let contractResult = contract.getAction()
 
+      let getActionsQuery =
+      `
+      SELECT hits, conversionAction
+      FROM smartContract
+      WHERE contract_id = (
+        SELECT contract_id
+        FROM contractTransaction
+        WHERE contractAddress = ?
+      )
+      `
+      let getActionsResult = await db.queryParamArr(getActionsQuery, contractAddress)
+      if(!getActionsResult){
+        throw "500"
+      }
+
       console.log(contractResult)
-      if(contractResult[0].c[0] > action || contractResult[1].c[0] > hits){
+      if(contractResult[0].c[0] > action || contractResult[1].c[0] > hits || getActionsResult[0].conversionAction > action || getActionsResult[0].hits > hits){
         throw "1404"
       }
 

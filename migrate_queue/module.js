@@ -3,7 +3,9 @@ const request = require('request')
 
 const selectContractAddressQuery =
 `
-SELECT contractTransaction FROM contractTransaction WHERE contractAddress is NULL AND contractTransaction is not NULL
+SELECT contractTransaction
+FROM contractTransaction
+WHERE contractAddress is NULL AND contractTransaction is not NULL
 `
 
 const selectToMigrateQuery = // hits = 0 , conversionAction = 0 -> 생성된지 얼마 안됨
