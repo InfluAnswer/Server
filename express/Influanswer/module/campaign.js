@@ -107,15 +107,16 @@ module.exports = {
     SELECT EXISTS (
 		SELECT *
 		FROM smartContract
-		WHERE campaign_id = ?
+		WHERE campaign_id = ? AND inf_id = ?
 		) AS SUCCESS
     `
+    console.log(campaign_id, inf_id)
 
-    let checkDuplicationResult = await db.queryParamArr(checkDuplicationQuery, campaign_id)
+    let checkDuplicationResult = await db.queryParamArr(checkDuplicationQuery, [campaign_id, inf_id])
     if(checkDuplicationResult[0].SUCCESS){
       throw "1503"
     }
-
+	
     let insertContractQuery =
     `
     INSERT INTO smartContract(campaign_id, inf_id, tracking_url)
